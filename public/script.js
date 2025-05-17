@@ -84,9 +84,6 @@ ws.addEventListener('message', (message) => {
       if ("slider1" in data) {
         controlledByTD1.value = data["slider1"] * 100;
       }
-      console.log("got data", data);
-    }
-    if (data) {
       if ("slider2" in data) {
         controlledByTD2.value = data["slider2"] * 100;
       }
