@@ -63,7 +63,8 @@ radioButtons2.forEach(radio => {
 
 
 
-let controlledByTD = document.querySelector('.controlledByTD');
+let controlledByTD1 = document.querySelector('.controlledByTD1');
+let controlledByTD2 = document.querySelector('.controlledByTD2');
 
 ws.addEventListener('open', (event) => {
   console.log('Socket connection open');
@@ -81,7 +82,13 @@ ws.addEventListener('message', (message) => {
     let data = JSON.parse(message.data);
     if (data) {
       if ("slider1" in data) {
-        controlledByTD.value = data["slider1"] * 100;
+        controlledByTD1.value = data["slider1"] * 100;
+      }
+      console.log("got data", data);
+    }
+    if (data) {
+      if ("slider2" in data) {
+        controlledByTD2.value = data["slider2"] * 100;
       }
       console.log("got data", data);
     }
