@@ -1,20 +1,24 @@
 let ws = new WebSocket('wss://web-touchdesigner-1-13ad4ce86bcf.herokuapp.com:443');
 
-let inputElements = document.querySelectorAll('input[name^="in"]');
+let inputElements = document.querySelectorAll('input');
 
 inputElements.forEach(input => {
-  input.addEventListener('input', () => {
-    const name = input.name;
-    let value;
+  // Vérifie si l'input a au moins une classe qui commence par 'in'
+  const matchingClass = Array.from(input.classList).find(c => c.startsWith('in'));
+  
+  if (matchingClass) {
+    input.addEventListener('input', () => {
+      let value;
 
-    if (input.type === 'checkbox' || input.type === 'radio') {
-      value = input.checked ? 1 : 0;
-    } else {
-      value = input.value;
-    }
+      if (input.type === 'checkbox' || input.type === 'radio') {
+        value = input.checked ? 1 : 0;
+      } else {
+        value = input.value;
+      }
 
-    ws.send(JSON.stringify({ [name]: isNaN(value) ? value : parseFloat(value) }));
-  });
+      ws.send(JSON.stringify({ [matchingClass]: isNaN(value) ? value : parseFloat(value) }));
+    });
+  }
 });
 
 
