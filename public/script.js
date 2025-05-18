@@ -4,7 +4,6 @@ let inputElements = document.querySelectorAll('input');
 
 inputElements.forEach(input => {
   const matchingClass = Array.from(input.classList).find(c => c.startsWith('in'));
-
   if (!matchingClass) return;
 
   if (input.type === 'button') {
@@ -26,7 +25,8 @@ inputElements.forEach(input => {
   else if (input.type === 'radio') {
     input.addEventListener('input', () => {
       if (input.checked) {
-        ws.send(JSON.stringify({ [matchingClass]: input.value }));
+        // Clé = name du groupe radio
+        ws.send(JSON.stringify({ [input.name]: input.value }));
       }
     });
   }
