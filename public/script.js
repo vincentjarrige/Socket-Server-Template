@@ -1,25 +1,42 @@
-let ws = new WebSocket('wss://web-touchdesigner-1-13ad4ce86bcf.herokuapp.com:443');
-
 let inputElements = document.querySelectorAll('input');
 
 inputElements.forEach(input => {
-  // Vérifie si l'input a au moins une classe qui commence par 'in'
   const matchingClass = Array.from(input.classList).find(c => c.startsWith('in'));
-  
-  if (matchingClass) {
+
+  if (!matchingClass) return;
+
+  if (input.type === 'button') {
+    input.addEventListener('click', () => {
+      ws.send(JSON.stringify({ [matchingClass]: 1 }));
+      setTimeout(() => {
+        ws.send(JSON.stringify({ [matchingClass]: 0 }));
+      }, 500);
+    });
+  }
+
+  else if (input.type === 'checkbox') {
     input.addEventListener('input', () => {
-      let value;
+      const value = input.checked ? 1 : 0;
+      ws.send(JSON.stringify({ [matchingClass]: value }));
+    });
+  }
 
-      if (input.type === 'checkbox' || input.type === 'radio') {
-        value = input.checked ? 1 : 0;
-      } else {
-        value = input.value;
+  else if (input.type === 'radio') {
+    input.addEventListener('input', () => {
+      if (input.checked) {
+        ws.send(JSON.stringify({ [matchingClass]: input.value }));
       }
+    });
+  }
 
+  else {
+    input.addEventListener('input', () => {
+      let value = input.value;
       ws.send(JSON.stringify({ [matchingClass]: isNaN(value) ? value : parseFloat(value) }));
     });
   }
 });
+
 
 
 
