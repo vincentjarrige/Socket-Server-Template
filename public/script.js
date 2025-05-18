@@ -1,60 +1,14 @@
 let ws = new WebSocket('wss://web-touchdesigner-1-13ad4ce86bcf.herokuapp.com:443');
 
-let controllTD = document.querySelector('.controllTD') ;
-controllTD.addEventListener('input', (event) => {
-  ws.send(JSON.stringify({ 'slider1': controllTD.value / 100 }));
-}, false);
+let allInputs = document.querySelectorAll('input');
 
-let txtcontrollTD = document.querySelector('.txtcontrollTD') ;
-txtcontrollTD.addEventListener('input', (event) => {
-  ws.send(JSON.stringify({ 'slider2': txtcontrollTD.value }));
-}, false);
+allInputs.forEach(input => {
+  input.addEventListener('input', () => {
+    const name = input.name || input.id || input.className;
+    const value = (input.type === 'checkbox' || input.type === 'radio') ? (input.checked ? 1 : 0) : input.value;
 
-
-
-let pulseButtonTD = document.querySelector('.pulseButtonTD');
-
-pulseButtonTD.addEventListener('click', () => {
-  ws.send(JSON.stringify({ 'slider3': 1 }));
-
-  // Attendre 0.5 seconde (500 ms), puis envoyer 0
-  setTimeout(() => {
-    ws.send(JSON.stringify({ 'slider3': 0 }));
-  }, 500);
-});
-
-
-let checkboxTD = document.querySelector('.checkboxTD');
-checkboxTD.addEventListener('change', () => {
-  const value = checkboxTD.checked ? 1 : 0;
-  ws.send(JSON.stringify({ 'slider4': value }));
-});
-
-
-let radioButtons = document.querySelectorAll('input[name="optionTD"]');
-
-radioButtons.forEach(radio => {
-  radio.addEventListener('change', () => {
-    if (radio.checked) {
-      const selected = parseInt(radio.value);
-      const data = {
-        slider5: selected === 5 ? 1 : 0,
-        slider6: selected === 6 ? 1 : 0,
-        slider7: selected === 7 ? 1 : 0
-      };
-      ws.send(JSON.stringify(data));
-    }
-  });
-});
-
-
-let radioButtons2 = document.querySelectorAll('input[name="groupTD2"]');
-
-radioButtons2.forEach(radio => {
-  radio.addEventListener('change', () => {
-    if (radio.checked) {
-      const value = parseInt(radio.value);
-      ws.send(JSON.stringify({ slider8: value }));
+    if (name) {
+      ws.send(JSON.stringify({ [name]: parseFloat(value) }));
     }
   });
 });
