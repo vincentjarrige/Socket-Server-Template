@@ -1,3 +1,5 @@
+let ws = new WebSocket('wss://web-touchdesigner-1-13ad4ce86bcf.herokuapp.com:443');
+
 let inputElements = document.querySelectorAll('input');
 
 inputElements.forEach(input => {
